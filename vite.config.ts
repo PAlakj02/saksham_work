@@ -13,7 +13,9 @@ export default defineConfig({
   // docs/MODULE1_NOTIFICATIONS.md "Deployment target".
   nitro: { preset: "vercel" },
 
-  server: {
-    allowedHosts: ["lagged-catching-prayer.ngrok-free.dev"],
+  vite: {
+    server: {
+      allowedHosts: ["lagged-catching-prayer.ngrok-free.dev"],
+    },
   },
 });

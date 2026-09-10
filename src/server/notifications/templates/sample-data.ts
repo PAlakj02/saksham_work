@@ -50,4 +50,10 @@ export const SAMPLE_DATA: TemplateDataMap = {
     lifetimeDonationCount: 8,
     impactUrl: "https://example.org/dashboard",
   },
+  LAPSED_DONOR_REENGAGEMENT: {
+    donorName: "Priya Sharma",
+    lastDonationDateFormatted: "13 June 2026",
+    lifetimeTotalFormatted: "₹42,500",
+    donateUrl: "https://example.org/donate",
+  },
 };

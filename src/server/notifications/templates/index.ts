@@ -4,6 +4,7 @@ import * as receiptReady from "./receipt-ready";
 import * as recurringReminder from "./recurring-reminder";
 import * as recurringCharged from "./recurring-charged";
 import * as monthlyImpactSummary from "./monthly-impact-summary";
+import * as lapsedDonor from "./lapsed-donor";
 import { injectTestBadge } from "./layout";
 
 export interface RenderedEmail {
@@ -21,6 +22,7 @@ export interface TemplateDataMap {
   RECURRING_DONATION_REMINDER: recurringReminder.RecurringReminderData;
   RECURRING_DONATION_CHARGED: recurringCharged.RecurringChargedData;
   MONTHLY_IMPACT_SUMMARY: monthlyImpactSummary.MonthlyImpactSummaryData;
+  LAPSED_DONOR_REENGAGEMENT: lapsedDonor.LapsedDonorData;
 }
 
 /** The `templateKey` persisted on every notification_logs row. */
@@ -30,6 +32,7 @@ export const TEMPLATE_KEYS: Record<NotificationTypeId, string> = {
   RECURRING_DONATION_REMINDER: recurringReminder.TEMPLATE_KEY,
   RECURRING_DONATION_CHARGED: recurringCharged.TEMPLATE_KEY,
   MONTHLY_IMPACT_SUMMARY: monthlyImpactSummary.TEMPLATE_KEY,
+  LAPSED_DONOR_REENGAGEMENT: lapsedDonor.TEMPLATE_KEY,
 };
 
 const EMAIL_RENDERERS = {
@@ -38,6 +41,7 @@ const EMAIL_RENDERERS = {
   RECURRING_DONATION_REMINDER: recurringReminder.renderRecurringReminderEmail,
   RECURRING_DONATION_CHARGED: recurringCharged.renderRecurringChargedEmail,
   MONTHLY_IMPACT_SUMMARY: monthlyImpactSummary.renderMonthlyImpactSummaryEmail,
+  LAPSED_DONOR_REENGAGEMENT: lapsedDonor.renderLapsedDonorEmail,
 } satisfies { [K in NotificationTypeId]: (data: TemplateDataMap[K]) => RenderedEmail };
 
 const WHATSAPP_RENDERERS = {
@@ -46,6 +50,7 @@ const WHATSAPP_RENDERERS = {
   RECURRING_DONATION_REMINDER: recurringReminder.renderRecurringReminderWhatsApp,
   RECURRING_DONATION_CHARGED: recurringCharged.renderRecurringChargedWhatsApp,
   MONTHLY_IMPACT_SUMMARY: monthlyImpactSummary.renderMonthlyImpactSummaryWhatsApp,
+  LAPSED_DONOR_REENGAGEMENT: lapsedDonor.renderLapsedDonorWhatsApp,
 } satisfies { [K in NotificationTypeId]: (data: TemplateDataMap[K]) => RenderedWhatsApp };
 
 /**
@@ -95,3 +100,4 @@ export type { ReceiptReadyData } from "./receipt-ready";
 export type { RecurringReminderData } from "./recurring-reminder";
 export type { RecurringChargedData } from "./recurring-charged";
 export type { MonthlyImpactSummaryData } from "./monthly-impact-summary";
+export type { LapsedDonorData } from "./lapsed-donor";

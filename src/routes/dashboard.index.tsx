@@ -155,6 +155,12 @@ function DashboardHome() {
               >
                 Templates
               </Link>
+              <Link
+                to="/dashboard/admin/leads"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-2 text-xs font-medium text-navy hover:bg-accent"
+              >
+                Leads
+              </Link>
             </>
           )}
           <button

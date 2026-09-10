@@ -150,6 +150,70 @@ export const notificationLogs = pgTable(
   ],
 );
 
+// People who've expressed interest but haven't signed up/donated yet.
+// Currently sourced only from the /partner inquiry form. Staff-only —
+// see supabase/migrations/20260910120000_lead_engine_and_lapsed_donor.sql.
+export const leads = pgTable(
+  "leads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    fullName: text("full_name").notNull(),
+    organization: text("organization").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    source: text("source").notNull().default("partner_form"),
+    message: text("message"),
+    /** Simple, explainable heuristic score — see src/server/leads/scoring.ts. */
+    score: integer("score").notNull().default(0),
+    status: text("status")
+      .notNull()
+      .$type<"new" | "contacted" | "converted" | "closed">()
+      .default("new"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("leads_created_at_idx").on(t.createdAt), index("leads_status_idx").on(t.status)],
+);
+
+export const LEAD_MESSAGE_TYPES = ["LEAD_WELCOME", "LEAD_FOLLOWUP"] as const;
+export type LeadMessageType = (typeof LEAD_MESSAGE_TYPES)[number];
+
+export const leadMessages = pgTable(
+  "lead_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    leadId: uuid("lead_id")
+      .notNull()
+      .references(() => leads.id, { onDelete: "cascade" }),
+    messageType: text("message_type").notNull().$type<LeadMessageType>(),
+    channel: text("channel").notNull().$type<NotificationChannel>(),
+    recipient: text("recipient").notNull(),
+    subject: text("subject"),
+    provider: text("provider").notNull(),
+    providerMessageId: text("provider_message_id"),
+    status: text("status").notNull().$type<"QUEUED" | "SENT" | "FAILED" | "SKIPPED">(),
+    errorCode: text("error_code"),
+    errorMessage: text("error_message"),
+    idempotencyKey: text("idempotency_key"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    failedAt: timestamp("failed_at", { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex("lead_messages_idempotency_key_key").on(t.idempotencyKey),
+    index("lead_messages_lead_id_idx").on(t.leadId),
+    index("lead_messages_created_at_idx").on(t.createdAt),
+  ],
+);
+
+export const leadsRelations = relations(leads, ({ many }) => ({
+  messages: many(leadMessages),
+}));
+
+export const leadMessagesRelations = relations(leadMessages, ({ one }) => ({
+  lead: one(leads, { fields: [leadMessages.leadId], references: [leads.id] }),
+}));
+
 export const donorsRelations = relations(donors, ({ many }) => ({
   donations: many(donations),
   receipts: many(receipts),

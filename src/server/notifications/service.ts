@@ -327,14 +327,14 @@ async function isChannelEnabled(
   return channel === "email" ? pref.emailEnabled : pref.whatsappEnabled;
 }
 
-function isRealEmailProvider(name: string): boolean {
+export function isRealEmailProvider(name: string): boolean {
   return name !== "console";
 }
-function isRealWhatsAppProvider(name: string): boolean {
+export function isRealWhatsAppProvider(name: string): boolean {
   return name !== "disabled";
 }
 
-function isRecipientAllowlisted(recipient: string): boolean {
+export function isRecipientAllowlisted(recipient: string): boolean {
   const allowlist = (process.env.NOTIFICATION_TEST_RECIPIENTS || "")
     .split(",")
     .map((s) => s.trim().toLowerCase())

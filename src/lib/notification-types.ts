@@ -19,6 +19,7 @@ export const NOTIFICATION_TYPE_IDS = [
   "RECURRING_DONATION_CHARGED",
   "RECURRING_DONATION_REMINDER",
   "MONTHLY_IMPACT_SUMMARY",
+  "LAPSED_DONOR_REENGAGEMENT",
 ] as const;
 export type NotificationTypeId = (typeof NOTIFICATION_TYPE_IDS)[number];
 
@@ -69,6 +70,15 @@ export const NOTIFICATION_TYPES: Record<NotificationTypeId, NotificationTypeMeta
     id: "MONTHLY_IMPACT_SUMMARY",
     name: "Monthly impact summary",
     description: "A monthly digest of the donor's contributions and impact.",
+    category: "optional",
+    channels: ["email", "whatsapp"],
+    defaultEnabled: { email: true, whatsapp: false },
+  },
+  LAPSED_DONOR_REENGAGEMENT: {
+    id: "LAPSED_DONOR_REENGAGEMENT",
+    name: "Re-engagement check-in",
+    description:
+      "Sent to a past donor with no successful donation in a while, inviting them back.",
     category: "optional",
     channels: ["email", "whatsapp"],
     defaultEnabled: { email: true, whatsapp: false },
