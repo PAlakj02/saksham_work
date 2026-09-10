@@ -9,6 +9,10 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   // existing configuration
 
+  // Deploying to Vercel, not the wrapper's Cloudflare default — see
+  // docs/MODULE1_NOTIFICATIONS.md "Deployment target".
+  nitro: { preset: "vercel" },
+
   server: {
     allowedHosts: ["lagged-catching-prayer.ngrok-free.dev"],
   },
